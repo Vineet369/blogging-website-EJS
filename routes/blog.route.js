@@ -3,6 +3,7 @@ const multer  = require('multer');
 const path = require('path');
 
 const Blog = require('../models/blogs.models.js');
+const Comment = require('../models/comments.models.js');
 
 const router = Router();
 
@@ -22,7 +23,26 @@ router.get("/add-new", (req, res) => {
     return res.render("addBlog", {
         user: req.user,
     })
-})
+});
+  
+router.get('/:id', async (req, res) => {
+    const blog = await Blog.findById(req.params.id).populate("createdBy"); //call user model in createdBy foeld of blog-model
+    const comments = await Comment.find({blogId: req.params.id}).populate("createdby");
+    return res.render("blog", {                                            //without populate() createdBy only has objectId
+        user: req.user,
+        blog,
+        comments,
+    })
+});
+
+router.post('/comment/:blogId', async (req, res) => {
+    await Comment.create({
+        content: req.body.content,
+        blogId: req.params.blogId,
+        createdBy: req.user._id,
+    });
+    return res.redirect(`/blog/${req.params.blogId}`);
+});
 
 router.post("/", upload.single('coverImage'), async (req, res) => {
     const { title, body } = req.body
