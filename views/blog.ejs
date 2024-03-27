@@ -21,7 +21,7 @@
     <div class="container mt-3">
         <h1>Comments (<%= comments.length %>)</h1>
         <% if (locals.user) { %>
-            <form action="blog/comment/<%= blog._id %>" method="post">
+            <form action="comment/<%= blog._id %>" method="post">
                 <div class="mb-3">
                   <input type="text" class="form-control" name="content" placeholder="Enter your comment">
                 </div>

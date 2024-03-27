@@ -27,7 +27,7 @@ router.get("/add-new", (req, res) => {
   
 router.get('/:id', async (req, res) => {
     const blog = await Blog.findById(req.params.id).populate("createdBy"); //call user model in createdBy foeld of blog-model
-    const comments = await Comment.find({blogId: req.params.id}).populate("createdby");
+    const comments = await Comment.find({blogId: req.params.id}).populate("createdBy");
     return res.render("blog", {                                            //without populate() createdBy only has objectId
         user: req.user,
         blog,
